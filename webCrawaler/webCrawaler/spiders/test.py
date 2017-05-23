@@ -1,5 +1,5 @@
-from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
-from scrapy.contrib.spider import CrawlSpider, Rule
+#from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.spider import CrawlSpider, Rule
 from scrapy.selector import Selector
 from webCrawaler.items import *
 from scrapy.linkextractor import LinkExtractor
@@ -25,4 +25,4 @@ class MyGovSpider(CrawlSpider):
         collection = []
         links = LinkExtractor(canonicalize=True, unique=True).extract_links(response)
         for link in links:
-            print link
+            print(link)

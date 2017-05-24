@@ -22,7 +22,7 @@ def process_value(value):
 class MyGovSpider(CrawlSpider):
     name = "mygov_spider"
     allowed_domains = ['gov.in']
-    start_urls = ['http://goidirectory.gov.in/index.php/']
+    start_urls = ['http://goidirectory.gov.in/']
     #extract all links, and parse them using parse()
     rules = [
              Rule(LinkExtractor(allow=("^.*://[a-z]*.[a-z]*.gov.in.*",".*.php.*"), unique = True, process_value=process_value, deny_domains=('mp3')))
@@ -50,13 +50,19 @@ class MyGovSpider(CrawlSpider):
                         items.append(item)
                         yield Request(item["link"], callback=self.parse)
                     else:
-                        item["link"] = response.url + temp
-                        items.append(item)
-                        yield Request(item["link"], callback=self.parse)
+                        if re.match(r"sitecounter.*",i):
+                            l = re.match(r"(.*gov.in/).*",response.url).group(1)
+                            item["link"] = l + reg2.group(1)
+                            items.append(item)
+                            yield Request(item["link"], callback=self.parse)
                 elif reg1:
                     if re.match(r"javascript.*",i) or re.match(r"http.*",i):
                         continue   
-                    item["link"] = response.url + reg1.group(1)
+                    if re.match(r"\w*-*\w*.php",i):
+                        l = re.match(r"(.*gov.in/).*",response.url).group(1)
+                        item["link"] = l + reg1.group(1)
+                    else:
+                        item["link"] = response.url + reg1.group(1)
                     items.append(item)
                     yield Request(item["link"], callback=self.parse)
                 elif reg3:

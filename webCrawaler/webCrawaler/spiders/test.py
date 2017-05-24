@@ -4,6 +4,7 @@ from scrapy.selector import Selector, HtmlXPathSelector
 from webCrawaler.items import *
 import re
 from scrapy.linkextractors import LinkExtractor 
+from scrapy.linkextractors.sgml import SgmlLinkExtractor
 home = "http://goidirectory.gov.in/"
 collection = []
 
@@ -23,7 +24,7 @@ class MyGovSpider(CrawlSpider):
     start_urls = ['http://goidirectory.gov.in/index.php']
     #extract all links, and parse them using parse()
     rules = [
-             Rule(LinkExtractor(allow=("^.*://[a-z]*.[a-z]*.gov.in"), unique = True, process_value=process_value, deny_domains=('mp3')))
+             Rule(SgmlLinkExtractor(allow=("^.*://[a-z]*.[a-z]*.gov.in"), unique = True, process_value=process_value, deny_domains=('mp3')))
             ]
 
     def parse(self, response):

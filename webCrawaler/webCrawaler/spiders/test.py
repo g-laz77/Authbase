@@ -3,6 +3,7 @@ from scrapy.spider import CrawlSpider, Rule
 from scrapy.selector import Selector, HtmlXPathSelector
 from webCrawaler.items import *
 import re
+import requests
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor 
 home = "http://goidirectory.gov.in/"
@@ -43,18 +44,28 @@ class MyGovSpider(CrawlSpider):
                 reg1 = re.search(r"(.*.php)", i)
                 reg2 = re.search(r"javascript:openChild\('(.*?)','(.*?)'\);", i)
                 reg3 = re.search(r"(.*gov.in.*)",i)
+
                 if reg2:
                     temp = reg2.group(1)
                     if re.match(r"(http://.*)", temp):
                         item["link"] = temp
-                        items.append(item)
-                        yield Request(item["link"], callback=self.parse)
+                        items.append(item) 
                     else:
                         if re.match(r"sitecounter.*",i):
                             l = re.match(r"(.*gov.in/).*",response.url).group(1)
                             item["link"] = l + reg2.group(1)
-                            items.append(item)
-                            yield Request(item["link"], callback=self.parse)
+                            items.append(item)                            
+                    
+                    reg4 = re.search(r".*.pdf",item["link"])
+                    if reg4:        #if link is a pdf
+                        resp = requests.get(item["link"])
+                        fpointer = open("sample.pdf","wb")
+                        fpointer.write(resp.content)
+                        fpointer.close()
+                        #   make call to the pdf extractor and dump the data on solr
+                    else:
+                        yield Request(item["link"], callback=self.parse)
+
                 elif reg1:
                     if re.match(r"javascript.*",i) or re.match(r"http.*",i):
                         continue   
@@ -64,13 +75,32 @@ class MyGovSpider(CrawlSpider):
                     else:
                         item["link"] = response.url + reg1.group(1)
                     items.append(item)
-                    yield Request(item["link"], callback=self.parse)
+                    
+                    reg4 = re.search(r".*.pdf",item["link"])
+                    if reg4:        #if link is a pdf
+                        resp = requests.get(item["link"])
+                        fpointer = open("sample.pdf","wb")
+                        fpointer.write(resp.content)
+                        fpointer.close()
+                        #   make call to the pdf extractor and dump the data on solr
+                    else:
+                        yield Request(item["link"], callback=self.parse)
+
                 elif reg3:
                     if re.match(r"https?:\/\/\w+.\w+.\w+\/.*gov.in.*",i) or re.match(r"https?:\/\/\w+.\w+\/.*gov.in.*",i):
                         continue
                     item["link"] = reg3.group(1)
                     items.append(item)
-                    yield Request(item["link"], callback=self.parse)
+                    
+                    reg4 = re.search(r".*.pdf",item["link"])
+                    if reg4:        #if link is a pdf
+                        resp = requests.get(item["link"])
+                        fpointer = open("sample.pdf","wb")
+                        fpointer.write(resp.content)
+                        fpointer.close()
+                        #   make call to the pdf extractor and dump the data on solr
+                    else:
+                        yield Request(item["link"], callback=self.parse)
 
         #print(items)
         return(items)

@@ -32,14 +32,14 @@ class MyGovSpider(CrawlSpider):
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
         titles = hxs.xpath('//body')
-        filename = open("results",'a')
+        # filename = open("results",'a')
         items = []
         for title in titles: 
             #item["title"] = title.xpath(".//a/text()").extract()
             temp = title.xpath("//a/@href").extract()
             for i in temp:
                 #print(i)
-                filename.write(i)
+                # filename.write(i)
                 item = sampleItem()
                 reg1 = re.search(r"(.*.php)", i)
                 reg2 = re.search(r"javascript:openChild\('(.*?)','(.*?)'\);", i)
@@ -54,17 +54,17 @@ class MyGovSpider(CrawlSpider):
                         if re.match(r"sitecounter.*",i):
                             l = re.match(r"(.*gov.in/).*",response.url).group(1)
                             item["link"] = l + reg2.group(1)
-                            items.append(item)                            
-                    
-                    reg4 = re.search(r".*.pdf",item["link"])
-                    if reg4:        #if link is a pdf
-                        resp = requests.get(item["link"])
-                        fpointer = open("sample.pdf","wb")
-                        fpointer.write(resp.content)
-                        fpointer.close()
-                        #   make call to the pdf extractor and dump the data on solr
-                    else:
-                        yield Request(item["link"], callback=self.parse)
+                            items.append(item)  
+                    if 'link' in item:                          
+                        reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
+                        if reg4:        #if link is a pdf
+                            resp = requests.get(item["link"])
+                            fpointer = open("sample.pdf","wb")
+                            fpointer.write(resp.content)
+                            fpointer.close()
+                            #   make call to the pdf extractor and dump the data on solr
+                        else:
+                            yield Request(item["link"], callback=self.parse)
 
                 elif reg1:
                     if re.match(r"javascript.*",i) or re.match(r"http.*",i):
@@ -75,32 +75,32 @@ class MyGovSpider(CrawlSpider):
                     else:
                         item["link"] = response.url + reg1.group(1)
                     items.append(item)
-                    
-                    reg4 = re.search(r".*.pdf",item["link"])
-                    if reg4:        #if link is a pdf
-                        resp = requests.get(item["link"])
-                        fpointer = open("sample.pdf","wb")
-                        fpointer.write(resp.content)
-                        fpointer.close()
-                        #   make call to the pdf extractor and dump the data on solr
-                    else:
-                        yield Request(item["link"], callback=self.parse)
+                    if 'link' in item:                          
+                        reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
+                        if reg4:        #if link is a pdf
+                            resp = requests.get(item["link"])
+                            fpointer = open("sample.pdf","wb")
+                            fpointer.write(resp.content)
+                            fpointer.close()
+                            #   make call to the pdf extractor and dump the data on solr
+                        else:
+                            yield Request(item["link"], callback=self.parse)
 
                 elif reg3:
                     if re.match(r"https?:\/\/\w+.\w+.\w+\/.*gov.in.*",i) or re.match(r"https?:\/\/\w+.\w+\/.*gov.in.*",i):
                         continue
                     item["link"] = reg3.group(1)
                     items.append(item)
-                    
-                    reg4 = re.search(r".*.pdf",item["link"])
-                    if reg4:        #if link is a pdf
-                        resp = requests.get(item["link"])
-                        fpointer = open("sample.pdf","wb")
-                        fpointer.write(resp.content)
-                        fpointer.close()
-                        #   make call to the pdf extractor and dump the data on solr
-                    else:
-                        yield Request(item["link"], callback=self.parse)
+                    if 'link' in item:                          
+                        reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
+                        if reg4:        #if link is a pdf
+                            resp = requests.get(item["link"])
+                            fpointer = open("sample.pdf","wb")
+                            fpointer.write(resp.content)
+                            fpointer.close()
+                            #   make call to the pdf extractor and dump the data on solr
+                        else:
+                            yield Request(item["link"], callback=self.parse)
 
         #print(items)
         return(items)

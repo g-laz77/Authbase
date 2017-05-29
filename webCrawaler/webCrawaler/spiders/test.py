@@ -4,7 +4,7 @@ from scrapy.selector import Selector, HtmlXPathSelector
 from webCrawaler.items import *
 import re
 import requests
-from dump import *
+from webCrawaler.solrdump import *
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor 
 home = "http://goidirectory.gov.in/"
@@ -35,6 +35,19 @@ class MyGovSpider(CrawlSpider):
             ]
 
     def parse(self, response):
+        url = response.url.split("/")
+        htmlbody = response.body
+        down_file = "website/"
+        for i in url[2:]:
+            k = i.split(".")
+            if i:
+                for j in k:
+                    down_file += j + "-"
+                
+        with open(down_file[:-1],"wb") as f:
+            f.write(htmlbody)
+            f.close()
+
         hxs = HtmlXPathSelector(response)
         titles = hxs.xpath('//body')
         items = []
@@ -62,9 +75,16 @@ class MyGovSpider(CrawlSpider):
                         reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts]",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = proxies)
-                            fpointer = open("sample"+item["link"][-4:],"wb")
-                            fpointer.write(resp.content)
-                            fpointer.close()
+                            save_file = "files/"
+                            for i in item["link"].split("/")[2:]:
+                                k = i.split(".")
+                                if i:
+                                    for j in k:
+                                        save_file += j + "-"
+                                    
+                            with open(save_file[:-1],"wb") as f:
+                                f.write(resp.content)
+                                f.close()
                             #   make call to the pdf extractor and dump the data on solr
                             extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
                         else:
@@ -83,9 +103,16 @@ class MyGovSpider(CrawlSpider):
                         reg4 = re.search(r".*.[ptdcx][sdlxo][svfct]",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = proxies)
-                            fpointer = open("sample.pdf","wb")
-                            fpointer.write(resp.content)
-                            fpointer.close()
+                            save_file = "files/"
+                            for i in item["link"].split("/")[2:]:
+                                k = i.split(".")
+                                if i:
+                                    for j in k:
+                                        save_file += j + "-"
+                                    
+                            with open(save_file[:-1],"wb") as f:
+                                f.write(resp.content)
+                                f.close()
                             #   make call to the pdf extractor and dump the data on solr
                             extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
                         else:
@@ -99,10 +126,17 @@ class MyGovSpider(CrawlSpider):
                     if 'link' in item:                          
                         reg4 = re.search(r".*.[ptdcx][sdxol][vfcts]",str(item['link']))
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"], proxies = proxies)                            
-                            fpointer = open("sample.pdf","wb")
-                            fpointer.write(resp.content)
-                            fpointer.close()
+                            resp = requests.get(item["link"], proxies = proxies)
+                            save_file = "files/"
+                            for i in item["link"].split("/")[2:]:
+                                k = i.split(".")
+                                if i:
+                                    for j in k:
+                                        save_file += j + "-"
+                                    
+                            with open(save_file[:-1],"wb") as f:
+                                f.write(resp.content)
+                                f.close()
                             #   make call to the pdf extractor and dump the data on solr
                             extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
                         else:

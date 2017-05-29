@@ -8,7 +8,10 @@ from scrapy import Request
 from scrapy.linkextractors import LinkExtractor 
 home = "http://goidirectory.gov.in/"
 import os
+# from    
 collection = []
+proxies = {"http":"http://proxy.iiit.ac.in:8080",
+            "https":"https://proxy.iiit.ac.in:8080"}
 
 def process_value(value):
         exp1 = "javascript:openChild('sitecounter.php?id=11914','win2')"
@@ -58,7 +61,7 @@ class MyGovSpider(CrawlSpider):
                     if 'link' in item:                          
                         reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"])
+                            resp = requests.get(item["link"], proxies = proxies)
                             fpointer = open("sample.pdf","wb")
                             fpointer.write(resp.content)
                             fpointer.close()
@@ -78,7 +81,7 @@ class MyGovSpider(CrawlSpider):
                     if 'link' in item:                          
                         reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"])
+                            resp = requests.get(item["link"], proxies = proxies)
                             fpointer = open("sample.pdf","wb")
                             fpointer.write(resp.content)
                             fpointer.close()
@@ -94,7 +97,7 @@ class MyGovSpider(CrawlSpider):
                     if 'link' in item:                          
                         reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"])
+                            resp = requests.get(item["link"], proxies = proxies)                            
                             fpointer = open("sample.pdf","wb")
                             fpointer.write(resp.content)
                             fpointer.close()

@@ -4,16 +4,18 @@ from scrapy.selector import Selector, HtmlXPathSelector
 from webCrawaler.items import *
 import re
 import requests
+from dump import *
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor 
 home = "http://goidirectory.gov.in/"
 import os
-# from    
+  
 collection = []
 proxies = {"http":"http://proxy.iiit.ac.in:8080",
-            "https":"https://proxy.iiit.ac.in:8080"}
+           "https":"https://proxy.iiit.ac.in:8080"}
 
-def process_value(value):
+
+def process_value(value):   #process the javascript function of href
         exp1 = "javascript:openChild('sitecounter.php?id=11914','win2')"
         exp2 = ""
         m = re.search(r"javascript:openChild\('(.*?)','(.*?)'\);", value)
@@ -27,7 +29,7 @@ class MyGovSpider(CrawlSpider):
     name = "mygov_spider"
     allowed_domains = ['gov.in']
     start_urls = ['http://goidirectory.gov.in/']
-    #extract all links, and parse them using parse()
+    #extract all links, and parse them using parse() also only [gov.in] domain
     rules = [
              Rule(LinkExtractor(allow=("^.*://[a-z]*.[a-z]*.gov.in.*",".*.php.*"), unique = True, process_value=process_value, deny_domains=('mp3')))
             ]
@@ -35,14 +37,12 @@ class MyGovSpider(CrawlSpider):
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
         titles = hxs.xpath('//body')
-        # filename = open("results",'a')
         items = []
         for title in titles: 
-            #item["title"] = title.xpath(".//a/text()").extract()
+            #extract all links in the page
             temp = title.xpath("//a/@href").extract()
             for i in temp:
-                #print(i)
-                # filename.write(i)
+                # regex for the type of link present
                 item = sampleItem()
                 reg1 = re.search(r"(.*.php)", i)
                 reg2 = re.search(r"javascript:openChild\('(.*?)','(.*?)'\);", i)
@@ -59,13 +59,14 @@ class MyGovSpider(CrawlSpider):
                             item["link"] = l + reg2.group(1)
                             items.append(item)  
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts]",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = proxies)
-                            fpointer = open("sample.pdf","wb")
+                            fpointer = open("sample"+item["link"][-4:],"wb")
                             fpointer.write(resp.content)
                             fpointer.close()
                             #   make call to the pdf extractor and dump the data on solr
+                            extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
                         else:
                             yield Request(item["link"], callback=self.parse)
 
@@ -79,13 +80,14 @@ class MyGovSpider(CrawlSpider):
                         item["link"] = response.url + reg1.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][svfct]",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = proxies)
                             fpointer = open("sample.pdf","wb")
                             fpointer.write(resp.content)
                             fpointer.close()
                             #   make call to the pdf extractor and dump the data on solr
+                            extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
                         else:
                             yield Request(item["link"], callback=self.parse)
 
@@ -95,13 +97,14 @@ class MyGovSpider(CrawlSpider):
                     item["link"] = reg3.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdc][sdxo][vfct]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdxol][vfcts]",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = proxies)                            
                             fpointer = open("sample.pdf","wb")
                             fpointer.write(resp.content)
                             fpointer.close()
                             #   make call to the pdf extractor and dump the data on solr
+                            extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
                         else:
                             yield Request(item["link"], callback=self.parse)
 

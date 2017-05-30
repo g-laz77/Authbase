@@ -1,5 +1,5 @@
 import os
-from pdfminer import *
+from webCrawaler.pdfparser import *
 import csv
 from xlrd import open_workbook
 import shutil
@@ -9,9 +9,9 @@ solr_path = "/usr/local/Cellar/solr/6.5.0/server/solr/"
 def extract_data(file_name, file_url):
     #extract data using regex and dump into xml file
     if file_name[-4:] == ".pdf" or file_name[-4:] == ".txt":
-        opt_file = open("output.csv", "wb")
+        opt_file = open("output.csv", "w")
         opt_file.write("Type,Number,url")
-        if filename[-4:] == ".pdf":
+        if file_name[-4:] == ".pdf":
             data = pdfparser(file_name)
         else:
             data = open(file_name,"w+").read()
@@ -26,7 +26,7 @@ def extract_data(file_name, file_url):
         post("output.csv", "samcoll")
         os.remove("output.csv")
 
-    elif file_name[-4:] == ".xls":
+    elif file_name[-4:] == ".xls" or filename[-4:] == "xlsx":
         wb = open_workbook(file_name)
         for i in range(0,wb.nsheets):
             sheet = wb.sheet_by_index(i)

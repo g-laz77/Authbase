@@ -38,11 +38,12 @@ class MyGovSpider(CrawlSpider):
         url = response.url.split("/")
         htmlbody = response.body
         down_file = "website/"
-        for i in url[2:]:
+        for i in url[2:-1]:
             k = i.split(".")
             if i:
                 for j in k:
                     down_file += j + "-"
+        down_file += url[-1]
                 
         with open(down_file[:-1],"wb") as f:
             f.write(htmlbody)
@@ -72,21 +73,25 @@ class MyGovSpider(CrawlSpider):
                             item["link"] = l + reg2.group(1)
                             items.append(item)  
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?",str(item['link']))
+                        reg3 = re.search(r".*.[jg][pi][fg]",str(item['link']))
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"], proxies = proxies)
+                            resp = requests.get(item["link"], proxies = "")
                             save_file = "files/"
-                            for i in item["link"].split("/")[2:]:
+                            for i in item["link"].split("/")[2:-1]:
                                 k = i.split(".")
                                 if i:
                                     for j in k:
                                         save_file += j + "-"
+                            save_file += item["link"].split("/")[-1]
                                     
-                            with open(save_file[:-1],"wb") as f:
+                            with open(save_file,"wb") as f:
                                 f.write(resp.content)
                                 f.close()
                             #   make call to the pdf extractor and dump the data on solr
                             extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
+                        elif reg3:#if an image
+                            print("nope")
                         else:
                             yield Request(item["link"], callback=self.parse)
 
@@ -100,21 +105,25 @@ class MyGovSpider(CrawlSpider):
                         item["link"] = response.url + reg1.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][svfct]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?",str(item['link']))
+                        reg3 = re.search(r".*.[jg][pi][fg]",str(item['link']))
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"], proxies = proxies)
+                            resp = requests.get(item["link"], proxies = "")
                             save_file = "files/"
-                            for i in item["link"].split("/")[2:]:
+                            for i in item["link"].split("/")[2:-1]:
                                 k = i.split(".")
                                 if i:
                                     for j in k:
                                         save_file += j + "-"
+                            save_file += item["link"].split("/")[-1]
                                     
-                            with open(save_file[:-1],"wb") as f:
+                            with open(save_file,"wb") as f:
                                 f.write(resp.content)
                                 f.close()
                             #   make call to the pdf extractor and dump the data on solr
                             extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
+                        elif reg3:#if an image
+                            continue
                         else:
                             yield Request(item["link"], callback=self.parse)
 
@@ -124,21 +133,25 @@ class MyGovSpider(CrawlSpider):
                     item["link"] = reg3.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdxol][vfcts]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?",str(item['link']))
+                        reg3 = re.search(r".*.[jg][pi][fg]",str(item['link']))
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"], proxies = proxies)
+                            resp = requests.get(item["link"], proxies = "")
                             save_file = "files/"
-                            for i in item["link"].split("/")[2:]:
+                            for i in item["link"].split("/")[2:-1]:
                                 k = i.split(".")
                                 if i:
                                     for j in k:
                                         save_file += j + "-"
+                            save_file += item["link"].split("/")[-1]
                                     
-                            with open(save_file[:-1],"wb") as f:
+                            with open(save_file,"wb") as f:
                                 f.write(resp.content)
                                 f.close()
                             #   make call to the pdf extractor and dump the data on solr
                             extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
+                        elif reg3:#if an image
+                            continue
                         else:
                             yield Request(item["link"], callback=self.parse)
 

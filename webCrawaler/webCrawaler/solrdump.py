@@ -1,6 +1,7 @@
 import os
 #from webCrawaler.pdfparser import *
 from pdfparser import *
+from solr_ui import *
 import csv
 from xlrd import open_workbook
 import shutil
@@ -54,3 +55,4 @@ def post(xmlfile, collection):
 # post(solr_path+collection+"/"+xm,collection)  
 if __name__ == '__main__':
     extract_data("Data.pdf", "http://suhan.com")
+show_docs("parser")

@@ -23,8 +23,8 @@ def pdfparser(data):
     for i, page in enumerate(PDFPage.get_pages(fp)):
         interpreter.process_page(page)
         data = retstr.getvalue()
-    #print(data) 
-    return data
+    
+    return data.split()
 
 if __name__ == '__main__':
     pdfparser(sys.argv[1])  

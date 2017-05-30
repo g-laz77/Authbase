@@ -1,8 +1,10 @@
 import os
-from webCrawaler.pdfparser import *
+#from webCrawaler.pdfparser import *
+from pdfparser import *
 import csv
 from xlrd import open_workbook
 import shutil
+import re
 
 solr_path = "/usr/local/Cellar/solr/6.5.0/server/solr/"
 
@@ -10,7 +12,7 @@ def extract_data(file_name, file_url):
     #extract data using regex and dump into xml file
     if file_name[-4:] == ".pdf" or file_name[-4:] == ".txt":
         opt_file = open("output.csv", "w")
-        opt_file.write("Type,Number,url")
+        opt_file.write("Type,Number,url\n")
         if file_name[-4:] == ".pdf":
             data = pdfparser(file_name)
         else:
@@ -19,11 +21,11 @@ def extract_data(file_name, file_url):
             pan = re.match(".*([A-Z]{5}[0-9]{4}[A-Z])", info) #regex to match pan card details
             aadhaar = re.match(".*([0-9]{4} [0-9]{4} [0-9]{4})", info)  #regex to match aadhaar card details
             if pan:
-                opt_file.write("Pan",pan,file_url)
+                opt_file.write("Pancard,"+str(pan.group(1))+","+str(file_url)+"\n")
             if aadhaar:
-                opt_file.write("AAdhaar",pan,file_url)
+                opt_file.write("AAdhaar,"+str(pan.group(1))+","+str(file_url)+"\n")   
         opt_file.close()
-        post("output.csv", "samcoll")
+        post("output.csv", "parser")
         os.remove("output.csv")
 
     elif file_name[-4:] == ".xls" or filename[-4:] == "xlsx":
@@ -40,7 +42,7 @@ def extract_data(file_name, file_url):
                     row = [int(cell.value) if isinstance(cell.value, float) else cell.value for cell in sheet.row(row_idx)]
                     writer.writerow(row)
             for filename in os.listdir("xlsdata"): #index each of the csv files on solr
-                post(filename, "samcoll")
+                post(filename, "parser")
             shutil.rmtree('xlsdata')
 
 def post(xmlfile, collection):
@@ -50,3 +52,5 @@ def post(xmlfile, collection):
 # xm = input("Enter data file:")
 # collection = input("Enter Collection name:")
 # post(solr_path+collection+"/"+xm,collection)  
+if __name__ == '__main__':
+    extract_data("Data.pdf", "http://suhan.com")

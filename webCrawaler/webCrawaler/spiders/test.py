@@ -100,7 +100,8 @@ class MyGovSpider(CrawlSpider):
                         continue   
                     if re.match(r"\w*-*\w*.php",i):
                         l = re.match(r"(.*gov.in/).*",response.url).group(1)
-                        item["link"] = l + reg1.group(1)
+                        if l:
+                            item["link"] = l + reg1.group(1)
                     else:
                         item["link"] = response.url + reg1.group(1)
                     items.append(item)

@@ -89,7 +89,7 @@ class MyGovSpider(CrawlSpider):
                                 f.write(resp.content)
                                 f.close()
                             #   make call to the pdf extractor and dump the data on solr
-                            extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
+                            extract_data(save_file, item["link"])  #Call to scan pdf                            
                         elif reg3:#if an image
                             print("nope")
                         else:
@@ -122,7 +122,7 @@ class MyGovSpider(CrawlSpider):
                                 f.write(resp.content)
                                 f.close()
                             #   make call to the pdf extractor and dump the data on solr
-                            extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
+                            extract_data(save_file, item["link"])  #Call to scan pdf                            
                         elif reg3:#if an image
                             continue
                         else:
@@ -150,7 +150,7 @@ class MyGovSpider(CrawlSpider):
                                 f.write(resp.content)
                                 f.close()
                             #   make call to the pdf extractor and dump the data on solr
-                            extract_data("sample"+item["link"][-4:], item["link"])  #Call to scan pdf                            
+                            extract_data(save_file, item["link"])  #Call to scan pdf                            
                         elif reg3:#if an image
                             continue
                         else:

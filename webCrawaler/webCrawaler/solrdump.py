@@ -55,4 +55,4 @@ def post(xmlfile, collection):
 # post(solr_path+collection+"/"+xm,collection)  
 if __name__ == '__main__':
     extract_data("lel.xlsx", "http://suhan.com")
-show_docs("parser")
+#show_docs("parser")

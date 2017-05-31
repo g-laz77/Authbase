@@ -28,11 +28,16 @@ def process_value(value):   #process the javascript function of href
 class MyGovSpider(CrawlSpider):
     name = "mygov_spider"
     allowed_domains = ['gov.in']
-    start_urls = ['http://goidirectory.gov.in/']
+    # start_urls = ['http://goidirectory.gov.in/']
+    start_urls = []
     #extract all links, and parse them using parse() also only [gov.in] domain
     rules = [
              Rule(LinkExtractor(allow=("^.*://[a-z]*.[a-z]*.gov.in.*",".*.php.*"), unique = True, process_value=process_value, deny_domains=('mp3')))
             ]
+    def __init__(self):
+        k = open("url.txt")
+        self.start_urls.append(str(k.read()))
+        print(self.start_urls)
 
     def parse(self, response):
         url = response.url.split("/")

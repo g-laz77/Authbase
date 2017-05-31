@@ -49,10 +49,11 @@ def extract_data(file_name, file_url):
 def post(xmlfile, collection):
     jar_file = solr_path + collection + "/post.jar"
     os.system("java -Dauto -Durl=http://139.59.70.133:8983/solr/" +collection+ "/update -jar  " +jar_file+ " " +xmlfile)
+    show_docs("parser")
 
 # xm = input("Enter data file:")
 # collection = input("Enter Collection name:")
 # post(solr_path+collection+"/"+xm,collection)  
 if __name__ == '__main__':
     extract_data("lel.xlsx", "http://suhan.com")
-#show_docs("parser")
+    show_docs("parser")

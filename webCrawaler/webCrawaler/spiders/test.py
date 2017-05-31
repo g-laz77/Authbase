@@ -66,8 +66,10 @@ class MyGovSpider(CrawlSpider):
                 reg1 = re.search(r"(.*.php)", i)
                 reg2 = re.search(r"javascript:openChild\('(.*?)','(.*?)'\);", i)
                 reg3 = re.search(r"(.*gov.in.*)",i)
-
-                if reg2:
+                reg4 = re.search(r"proxy.iiit.ac.in",i)
+                if reg4:
+                    print("bhup")
+                elif reg2:
                     temp = reg2.group(1)
                     if re.match(r"(http://.*)", temp):
                         item["link"] = temp
@@ -78,8 +80,8 @@ class MyGovSpider(CrawlSpider):
                             item["link"] = l + reg2.group(1)
                             items.append(item)  
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?",str(item['link']))
-                        reg3 = re.search(r".*.[jg][pi][fg]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?$",str(item['link']))
+                        reg3 = re.search(r".*.[ajgp][pni][kfg]$",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = "")
                             save_file = "files/"
@@ -111,8 +113,8 @@ class MyGovSpider(CrawlSpider):
                         item["link"] = response.url + reg1.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?",str(item['link']))
-                        reg3 = re.search(r".*.[jg][pi][fg]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?$",str(item['link']))
+                        reg3 = re.search(r".*.[jg][pi][fg]$",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = "")
                             save_file = "files/"
@@ -139,8 +141,8 @@ class MyGovSpider(CrawlSpider):
                     item["link"] = reg3.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?",str(item['link']))
-                        reg3 = re.search(r".*.[jg][pi][fg]",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?$",str(item['link']))
+                        reg3 = re.search(r".*.[jg][pi][fg]$",str(item['link']))
                         if reg4:        #if link is a pdf
                             resp = requests.get(item["link"], proxies = "")
                             save_file = "files/"

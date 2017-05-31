@@ -6,7 +6,7 @@ import json
 def show_docs(collection):
     connection = urlopen('http://139.59.70.133:8983/solr/'+collection+'/select?fq=Type:Pancard%20or%20Type:Aadhaar&indent=on&q=*:*&wt=json')
     response = simplejson.load(connection)
-    filename = open("details.txt","a")
+    filename = open("details.txt","w")
 
     #print(response['response']['numFound'], "documents found")
     stir = ""

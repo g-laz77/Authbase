@@ -68,9 +68,7 @@ class MyGovSpider(CrawlSpider):
                 reg1 = re.search(r"(.*.php)", i)
                 reg2 = re.search(r"javascript:openChild\('(.*?)','(.*?)'\);", i)
                 reg3 = re.search(r"(.*gov.in.*)",i)
-                #reg4 = re.search(r"proxy.iiit.ac.in",i)
-                # if reg4:
-                #     print("bhup")
+                
                 if reg2:
                     temp = reg2.group(1)
                     if re.match(r"(http://.*)", temp):
@@ -103,11 +101,11 @@ class MyGovSpider(CrawlSpider):
                     
         for item in items:
             if 'link' in item:                          
-                reg4 = re.search(r".*.[ptdcox][sdlxo][vfcts][x]?$",str(item['link']))
-                reg5 = re.search(r".*.[ajgp][pni][kfg]$",str(item['link']))
-                reg6 = re.search(r".*.[zrg][iza][pr]?$",str(item['link']))
+                reg4 = re.search(r".*\.[ptdcox][sdlxo][vfcts][x]?$",str(item['link']))
+                reg5 = re.search(r".*\.[ajgp][pni][kefg][g]?$",str(item['link']))
+                reg6 = re.search(r".*\.[zrg][iza][pr]?$",str(item['link']))
                 save_file = "files/"
-                if reg4:        #if link is a pdf
+                if reg4 or reg5:        #if link is a pdf
                     #resp = requests.get(item["link"], proxies = "")
                     for i in item["link"].split("/")[-4 :-1]:
                         k = i.split(".")
@@ -122,10 +120,8 @@ class MyGovSpider(CrawlSpider):
                         shutil.copyfileobj(response, out_file)
                     #   make call to the pdf extractor and dump the data on solr
                     #extract_data(save_file, item["link"])  #Call to scan pdf                            
-                elif reg5:#if an image
-                    with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
-                        shutil.copyfileobj(response, out_file)
-                    print("OCR not implemented yet.")
+                
+                    #print("OCR not implemented yet.")
                 elif reg6:  #if zipfiles
                     print("Extract zip files here")
                 else:

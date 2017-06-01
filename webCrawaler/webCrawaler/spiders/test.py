@@ -1,18 +1,25 @@
 #from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.spider import CrawlSpider, Rule
-from scrapy.selector import Selector, HtmlXPathSelector
+from scrapy.selector import Selector
 from webCrawaler.items import *
 import re
 import requests
-from webCrawaler.solrdump import *
+from solrdump import *
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor 
 home = "http://goidirectory.gov.in/"
 import os
-  
+import urllib.request
+import shutil
+import gzip
 collection = []
 proxies = {"http":"http://proxy.iiit.ac.in:8080",
            "https":"https://proxy.iiit.ac.in:8080"}
+
+...
+# Read the first 64 bytes of the file inside the .gz archive located at `url`
+
+        # Or do anything shown above using `uncompressed` instead of `response`.
 
 
 def process_value(value):   #process the javascript function of href
@@ -35,7 +42,7 @@ class MyGovSpider(CrawlSpider):
              Rule(LinkExtractor(allow=("^.*://[a-z]*.[a-z]*.gov.in.*",".*.php.*"), unique = True, process_value=process_value, deny_domains=('mp3')))
             ]
     def __init__(self):
-        k = open("url.txt")
+        k = open("url.txt","r")
         self.start_urls.append(str(k.read()))
         print(self.start_urls)
 
@@ -43,7 +50,7 @@ class MyGovSpider(CrawlSpider):
         url = response.url.split("/")
         htmlbody = response.body
         down_file = "website/"
-        for i in url[2:-1]:
+        for i in url[-4:-1]:
             k = i.split(".")
             if i:
                 for j in k:
@@ -54,7 +61,7 @@ class MyGovSpider(CrawlSpider):
             f.write(htmlbody)
             f.close()
 
-        hxs = HtmlXPathSelector(response)
+        hxs = Selector(response)
         titles = hxs.xpath('//body')
         items = []
         for title in titles: 
@@ -66,10 +73,10 @@ class MyGovSpider(CrawlSpider):
                 reg1 = re.search(r"(.*.php)", i)
                 reg2 = re.search(r"javascript:openChild\('(.*?)','(.*?)'\);", i)
                 reg3 = re.search(r"(.*gov.in.*)",i)
-                reg4 = re.search(r"proxy.iiit.ac.in",i)
-                if reg4:
-                    print("bhup")
-                elif reg2:
+                #reg4 = re.search(r"proxy.iiit.ac.in",i)
+                # if reg4:
+                #     print("bhup")
+                if reg2:
                     temp = reg2.group(1)
                     if re.match(r"(http://.*)", temp):
                         item["link"] = temp
@@ -80,25 +87,35 @@ class MyGovSpider(CrawlSpider):
                             item["link"] = l + reg2.group(1)
                             items.append(item)  
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?$",str(item['link']))
-                        reg3 = re.search(r".*.[ajgp][pni][kfg]$",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcox][sdlxo][vfcts][x]?$",str(item['link']))
+                        reg5 = re.search(r".*.[ajgp][pni][kfg]$",str(item['link']))
+                        reg6 = re.search(r".*.[zrg][iza][pr]?$",str(item['link']))
+                        save_file = "files/"
+
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"], proxies = "")
-                            save_file = "files/"
-                            for i in item["link"].split("/")[2:-1]:
+                            #resp = requests.get(item["link"], proxies = "")
+                            for i in item["link"].split("/")[-4 :-1]:
                                 k = i.split(".")
                                 if i:
                                     for j in k:
                                         save_file += j + "-"
                             save_file += item["link"].split("/")[-1]
-                                    
-                            with open(save_file,"wb") as f:
-                                f.write(resp.content)
-                                f.close()
+                            if save_file[-4] == '-':
+                                save_file[-4] = '.'
+                            #print(save_file)
+                            with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
+                                shutil.copyfileobj(response, out_file)
                             #   make call to the pdf extractor and dump the data on solr
-                            extract_data(save_file, item["link"])  #Call to scan pdf                            
-                        elif reg3:#if an image
-                            print("nope")
+                            #extract_data(save_file, item["link"])  #Call to scan pdf                            
+                        elif reg5:#if an image
+                            with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
+                                shutil.copyfileobj(response, out_file)
+                            print("OCR not implemented yet.")
+                        elif reg6:  #if zipfiles
+                            with urllib.request.urlopen(item["link"]) as response:
+                                with gzip.GzipFile(fileobj=response) as uncompressed:
+                                    file_header = uncompressed.read(64) # a `bytes` object
+                            print("Extract zip files here")
                         else:
                             yield Request(item["link"], callback=self.parse)
 
@@ -113,25 +130,30 @@ class MyGovSpider(CrawlSpider):
                         item["link"] = response.url + reg1.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?$",str(item['link']))
-                        reg3 = re.search(r".*.[jg][pi][fg]$",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcox][sdlxo][vfcts][x]?$",str(item['link']))
+                        reg5 = re.search(r".*.[ajgp][pni][kfg]$",str(item['link']))
+                        reg6 = re.search(r".*.[zrg][iza][pr]?$",str(item['link']))
+                        save_file = "files/"
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"], proxies = "")
-                            save_file = "files/"
-                            for i in item["link"].split("/")[2:-1]:
+                            #resp = requests.get(item["link"], proxies = "")
+                            for i in item["link"].split("/")[-4 :-1]:
                                 k = i.split(".")
                                 if i:
                                     for j in k:
                                         save_file += j + "-"
                             save_file += item["link"].split("/")[-1]
-                                    
-                            with open(save_file,"wb") as f:
-                                f.write(resp.content)
-                                f.close()
+                            if save_file[-4] == '-':
+                                save_file[-4] = '.'
+                            with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
+                                shutil.copyfileobj(response, out_file)
                             #   make call to the pdf extractor and dump the data on solr
-                            extract_data(save_file, item["link"])  #Call to scan pdf                            
-                        elif reg3:#if an image
-                            continue
+                            #extract_data(save_file, item["link"])  #Call to scan pdf                            
+                        elif reg5:#if an image
+                            with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
+                                shutil.copyfileobj(response, out_file)
+                            print("OCR not implemented yet.")
+                        elif reg6:  #if zipfiles
+                            print("Extract zip files here")
                         else:
                             yield Request(item["link"], callback=self.parse)
 
@@ -141,25 +163,31 @@ class MyGovSpider(CrawlSpider):
                     item["link"] = reg3.group(1)
                     items.append(item)
                     if 'link' in item:                          
-                        reg4 = re.search(r".*.[ptdcx][sdlxo][vfcts][x]?$",str(item['link']))
-                        reg3 = re.search(r".*.[jg][pi][fg]$",str(item['link']))
+                        reg4 = re.search(r".*.[ptdcox][sdlxo][vfcts][x]?$",str(item['link']))
+                        reg5 = re.search(r".*.[ajgp][pni][kfg]$",str(item['link']))
+                        reg6 = re.search(r".*.[zrg][iza][pr]?$",str(item['link']))
+                        save_file = "files/"
                         if reg4:        #if link is a pdf
-                            resp = requests.get(item["link"], proxies = "")
-                            save_file = "files/"
-                            for i in item["link"].split("/")[2:-1]:
+                            #resp = requests.get(item["link"], proxies = "")
+                            for i in item["link"].split("/")[-4 :-1]:
                                 k = i.split(".")
                                 if i:
                                     for j in k:
                                         save_file += j + "-"
                             save_file += item["link"].split("/")[-1]
-                                    
-                            with open(save_file,"wb") as f:
-                                f.write(resp.content)
-                                f.close()
+                            if save_file[-4] == '-':
+                                save_file[-4] = '.'
+                            #print(save_file)
+                            with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
+                                shutil.copyfileobj(response, out_file)
                             #   make call to the pdf extractor and dump the data on solr
-                            extract_data(save_file, item["link"])  #Call to scan pdf                            
-                        elif reg3:#if an image
-                            continue
+                            #extract_data(save_file, item["link"])  #Call to scan pdf                            
+                        elif reg5:#if an image
+                            with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
+                                shutil.copyfileobj(response, out_file)
+                            print("OCR not implemented yet.")
+                        elif reg6:  #if zipfiles
+                            print("Extract zip files here")
                         else:
                             yield Request(item["link"], callback=self.parse)
 

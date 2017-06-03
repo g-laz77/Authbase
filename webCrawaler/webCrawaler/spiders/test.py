@@ -101,9 +101,9 @@ class MyGovSpider(CrawlSpider):
                     
         for item in items:
             if 'link' in item:                          
-                reg4 = re.search(r".*\.[ptdcox][sdlxo][vfcts][x]?$",str(item['link']))
-                reg5 = re.search(r".*\.[ajgp][pni][kefg][g]?$",str(item['link']))
-                reg6 = re.search(r".*\.[zrg][iza][pr]?$",str(item['link']))
+                reg4 = re.search(r".*[\.]?[ptdcox][sdlxo][vfcts][x]?$",str(item['link']))
+                reg5 = re.search(r".*[\.]?[ajgp][pni][kefg][g]?$",str(item['link']))
+                reg6 = re.search(r".*[\.]?[zrg][iza][pr]?$",str(item['link']))
                 save_file = "files/"
                 if reg4 or reg5:        #if link is a pdf
                     #resp = requests.get(item["link"], proxies = "")

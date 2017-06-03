@@ -11,10 +11,17 @@ import re
 
 jar_file = "/usr/local/Cellar/solr/6.5.0/bin/post -c "
 counter = 0
+port = 8984
 
-def post(file, collection):
+def post(filename):
     #jar_file = solr_path + collection + "/post.jar"
-    os.system(jar_file + collection + " " + xmlfile + " -params literal.id=" + counter+ " ")
+    if filename[-4:] == ".pdf" or filename[-4:] == ".xls" or filename[-5:] == ".xlsx" or filename[-5:] == "docx"
+        or filename[-4:] == "doc":
+        collection = "techproducts"
+        os.system(jar_file + collection + " " + filename + " -params literal.id=" + counter+ " -p "+port)
+    elif filename[-4:] == ".csv" or filename[-4:] == ".xml" or filename[-4:] == ".json":
+        collection = "booster"
+        os.system(jar_file + collection + " " + filename)
     #show_docs("parser")
  
 if __name__ == '__main__':

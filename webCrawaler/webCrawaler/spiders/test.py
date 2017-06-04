@@ -115,6 +115,9 @@ class MyGovSpider(CrawlSpider):
                     save_file += item["link"].split("/")[-1]
                     if save_file[-4] == '-':
                         save_file[-4] = '.'
+                    with open("files_metadata.csv","a") as f:
+                        f.write(str(item["link"])+","+save_file)
+                        f.close()
                     #print(save_file)
                     with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
                         shutil.copyfileobj(response, out_file)

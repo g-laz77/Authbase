@@ -22,9 +22,6 @@ def post(filename,url):
  
 if __name__ == '__main__':
 
-    # inp = input("Enter the name of the file to be dumped:")
-    # coll = input("Enter the name of the collection:")
-    # post(inp,coll)
     for filename in os.listdir("files"):
         with open('files_metadata.csv', 'r') as f:
             reader = csv.reader(f)

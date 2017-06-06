@@ -8,7 +8,6 @@ def show_docs(collection):
     connection = urlopen('http://localhost:8984/solr/'+collection+'/select?&indent=on&q=text:/[A-Z]{5}[0-9]{4}[A-Z]/&wt=json')
     response = simplejson.load(connection)
     filename = open("details.txt","w")
-    #print(response)
     #print(response['response']['numFound'], "documents found")
     stir = ""
     for document in response['response']['docs']:

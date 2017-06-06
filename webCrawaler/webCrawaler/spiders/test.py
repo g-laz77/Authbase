@@ -106,12 +106,13 @@ class MyGovSpider(CrawlSpider):
                 reg5 = re.search(r".*[\.]?[ajgJp][Ppni][Gkefg][g]?$",str(item['link']))
                 reg6 = re.search(r".*[\.]?[zrg][iza][pr]?$",str(item['link']))
                 save_file = "files/"
-                if reg4 or reg5:        #if link is a pdf/xls/doc/img
+                if reg4 or reg5:        #if link is a pdf/xls/doc/img/txt
                     for i in item["link"].split("/")[-4 :-1]:
                         k = i.split(".")
                         if i:
                             for j in k:
                                 save_file += j + "-"
+                                
                     save_file += item["link"].split("/")[-1]
                     if save_file[-4] == '-':
                         save_file[-4] = '.'
@@ -122,7 +123,6 @@ class MyGovSpider(CrawlSpider):
                     with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
                         shutil.copyfileobj(response, out_file)
                     #   make call to the pdf extractor and dump the data on solr                
-                    #print("OCR not implemented yet.")
                 elif reg6:  #if zipfiles
                     r = requests.get(zip_file_url)
                     z = zipfile.ZipFile(io.BytesIO(r.content))

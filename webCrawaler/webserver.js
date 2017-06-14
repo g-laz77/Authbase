@@ -20,6 +20,18 @@ http.createServer( function (request, response) {
 }).listen(9000);
 
 function display(req,res) {
+  if(req.url.indexOf('.txt') != -1){ //req.url has the pathname, check if it conatins '.html'
+      if(req.url.indexOf('/hit_urls.txt') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/hit_urls.txt', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+      }
+  }
     if(req.url.indexOf('.html') != -1){ //req.url has the pathname, check if it conatins '.html'
       if(req.url.indexOf('/page/dashboard.html') != -1){
         var domain = "";
@@ -31,7 +43,16 @@ function display(req,res) {
           res.end();
         });
       }
-      
+      if(req.url.indexOf('/page/auth.html') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/page/auth.html', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.write(data);
+          res.end();
+        });
+      }
       if(req.url.indexOf('/index.html') != -1){
         fs.readFile(__dirname + '/index.html', function (err, data) {
           if (err) console.log(err);
@@ -102,6 +123,14 @@ function display(req,res) {
       }
       if(req.url.indexOf('/assets/js/demo.js') != -1){
         fs.readFile(__dirname + '/assets/js/demo.js', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/javascript'});
+          res.write(data);
+          res.end();
+        });
+      }
+      if(req.url.indexOf('/assets/js/current.js') != -1){
+        fs.readFile(__dirname + '/assets/js/current.js', function (err, data) {
           if (err) console.log(err);
           res.writeHead(200, {'Content-Type': 'text/javascript'});
           res.write(data);

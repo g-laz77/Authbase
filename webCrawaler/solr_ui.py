@@ -3,18 +3,27 @@ import simplejson
 import json
 
 
-def show_docs(collection):
+def show_docs(collection,query):
     #querying for pancard details
-    connection = urlopen('http://localhost:8984/solr/'+collection+'/select?&indent=on&q=text:/[A-Z]{5}[0-9]{4}[A-Z]/&wt=json')
+    connection = urlopen('http://localhost:8984/solr/'+collection+'/select?&indent=on&q=text:/'+query+'/&wt=json')
     response = simplejson.load(connection)
     filename = open("details.txt","w")
     #print(response['response']['numFound'], "documents found")
     stir = ""
     for document in response['response']['docs']:
-        print(document['id'],document['content'])
-
+        print(document['id'])
+        lines = open("vulner_url.txt","r+").read().split("\n")
+        temp = 1
+        for line in lines:
+            if line == document['id']:
+                temp = 0
+        if temp:
+            with open("vulner_url.txt","a+") as f:
+                f.write(document["id"])
     filename.write(stir)
     filename.close()
 
 if __name__ == '__main__':
-    show_docs("techproducts")
+    #inp = input("Enter regex: ")
+    while 1:
+        show_docs("techproducts","[A-Z]{5}[0-9]{4}[A-Z]")

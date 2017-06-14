@@ -102,7 +102,10 @@ class MyGovSpider(CrawlSpider):
                         if l:
                             item["link"] = l + reg1.group(1)
                     else:
-                        item["link"] = response.url + reg1.group(1)
+                        if i[0] == '\':
+                            item["link"] = response.url + reg1.group(1)[1:]
+                        else:
+                            item["link"] = response.url + reg1.group(1)                             
                     items.append(item)
                     
 

@@ -44,6 +44,18 @@ class MyGovSpider(CrawlSpider):
 
     def parse(self, response):
         url = response.url.split("/")
+        lines = open("hit_urls.txt",'r+').read().split('\n')
+        temp = 0
+        for line in lines:
+            
+            if response.url == line:
+                temp = 1
+                return 0
+                break
+        if not temp:
+            with open("hit_urls.txt","a+") as f:
+                f.write(response.url+"\n")
+
         htmlbody = response.body
         down_file = "website/"
         for i in url[-4:-1]:
@@ -116,12 +128,25 @@ class MyGovSpider(CrawlSpider):
                     save_file += item["link"].split("/")[-1]
                     if save_file[-4] == '-':
                         save_file[-4] = '.'
+                    
+                    lines = open("hit_urls.txt",'r+').read().split('\n')
+                    temp = 0
+                    for line in lines:    
+                        if response.url == line:
+                            temp = 1
+                            break
+                    if not temp:
+                        with open("hit_urls.txt","a+") as f:
+                            f.write(response.url+"\n")
+                    elif temp:
+                        continue
                     with open("files_metadata.csv","a") as f:
                         f.write(str(item["link"])+","+save_file+"\n")
-                        f.close()
+                        f.close()   
                     #print(save_file)
                     with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
                         shutil.copyfileobj(response, out_file)
+                    post(save_file,item["link"])
                     #   make call to the pdf extractor and dump the data on solr                
                 elif reg6:  #if zipfiles
                     r = requests.get(zip_file_url)
@@ -129,6 +154,7 @@ class MyGovSpider(CrawlSpider):
                     z.extractall('files/')
 
                 else:
+                    
                     yield Request(item["link"], callback=self.parse)
 
         #print(items)

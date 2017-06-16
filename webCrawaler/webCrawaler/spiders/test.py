@@ -40,19 +40,25 @@ class MyGovSpider(CrawlSpider):
     def __init__(self):
         k = open("url.txt","r")
         self.start_urls.append(str(k.read()))
+        os.remove("hit_urls.txt")
+        file = open('hit_urls.txt', 'w+')
+        file.close()
         print(self.start_urls)
 
     def parse(self, response):
         url = response.url.split("/")
         lines = open("hit_urls.txt",'r+').read().split('\n')
         temp = 0
-        for line in lines:
-            if response.url == line:
-                temp = 1
-                break
-        if not temp:
-            with open("hit_urls.txt","a+") as f:
-                f.write(response.url+"\n")
+        l = re.match(r"(.*gov.in/).*",response.url)
+        if l:
+            k = l.group(1)
+            for line in lines:
+                if k == line:
+                    temp = 1
+                    break
+            if not temp:
+                with open("hit_urls.txt","a+") as f:
+                    f.write(k+"\n")
 
         htmlbody = response.body
         down_file = "website/"

@@ -6,7 +6,7 @@ function readTextFile() {
 				if (file.readyState === 4) {
 					if (file.status === 200 || file.status == 0) {
 						var lines = file.responseText.split('\n');
-						response = "<tr><th>Index</th><th>Scanned urls</th></tr>";
+						response = "<tr><th>#</th><th>URLs</th></tr>";
 						for (i = 0; i < lines.length; i++) { 
 							response += "<tr><td>" + i + "</td><td>" + lines[i] + "</td></tr>";
 						}

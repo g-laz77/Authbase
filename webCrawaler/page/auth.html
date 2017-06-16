@@ -353,21 +353,25 @@
                 </h1>
                 <!--<nav class="nav nav-horizontal">-->
                 <!--<div class="col-sm-3 col-md-3 pull-left">-->
-                <form class="navbar-form navbar-left" role="search" style="width:20%;">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <button type="submit" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-search"></span>
+                <form class="navbar-form navbar-left" role="search" style="width:30%;">
+                    <div class="form-group row">
+
+                        <input type="text" class="form-control" placeholder="Query">
+
+                        <button type="submit" class="btn btn-default" style="background-color:rgb(111, 128, 128);color:white;">
+                                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                                    Submit
                                 </button>
                     </div>
-                </form>
-                <!--</div>-->
+            </div>
+            </form>
+            <!--</div>-->
 
 
-                <!--<a href="" class="responsive-nav" data-toggle="#off-canvas-right" data-toggle-class="open">-->
-                <!--<span class="l-menu"></span>-->
-                <!--</a>-->
-                <!--</nav>-->
+            <!--<a href="" class="responsive-nav" data-toggle="#off-canvas-right" data-toggle-class="open">-->
+            <!--<span class="l-menu"></span>-->
+            <!--</a>-->
+            <!--</nav>-->
             </div>
         </header>
 
@@ -384,45 +388,72 @@
 
         <!--<br>>      -->
         <table>
-            <tr>
+            <tbody>
+                <tr>
 
-                <td style="width:50%;">
-                    <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
-                        Indexed domains
-                    </h2>
-                    <div class="row" style="height: 350px; overflow: auto;background-color:rgb(111, 128, 128);">
+                    <td style="width:50%;">
+                        <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
+                            Indexed domains
+                        </h2>
+                        <div class="row" style="height: 350px; overflow: auto;">
 
-                        <table id="urls" style="float:left;width:100%;height:300px;overflow-y: auto;margin: auto;">
+                            <table id="urls" style="float:left;width:80%;height:300px;overflow-y: auto;margin-left: 50px;">
+                            </table>
+                        </div>
+                        <form class="navbar-form navbar-left" role="search" style="width:100%;">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search" style="width:80%;">
+                                <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+
+                    <td style="width:50%;">
+                        <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
+                            Hits
+                        </h2>
+                        <table style="float:left;width:70%;margin-left:60px;">
+                            <tbody>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Hits</th>
+                                </tr>
+                                <tr>
+                                    <td> PAN</td>
+                                    <td id="pan"></td>
+                                </tr>
+                                <tr>
+                                    <td> AADHAAR</td>
+                                    <td id="aadhaar"></td>
+                                </tr>
+                                <tr>
+                                    <td> VOTER-ID</td>
+                                    <td id="voter"></td>
+                                </tr>
+                            </tbody>
                         </table>
-                    </div>
-                </td>
-
-                <td style="width:50%;">
-                    <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
-                        Hits
-                    </h2>
-                    <table style="float:left;width:70%;margin-left:60px;">
-                        <tbody>
-                            <tr>
-                                <th>Type</th>
-                                <th>Hits</th>
-                            </tr>
-                            <tr>
-                                <td> PAN</td>
-                                <td id="pan"></td>
-                            </tr>
-                            <tr>
-                                <td> AADHAAR</td>
-                                <td id="aadhaar"></td>
-                            </tr>
-                            <tr>
-                                <td> VOTER-ID</td>
-                                <td id="voter"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%;">
+                        <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
+                            ML
+                        </h2>
+                        <div class="row" style="height: 350px; overflow: auto;background-color:#dddddd;">
+                        </div>
+                    </td>
+                    <td style="width:50%;">
+                        <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
+                            Vulnerabilities
+                        </h2>
+                        <div class="row" style="height: 350px; overflow: auto;background-color:#dddddd;">
+                        </div>
+                        
+                    </td>
+                </tr>
+            </tbody>
         </table>
 
 

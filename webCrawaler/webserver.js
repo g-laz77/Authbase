@@ -31,6 +31,36 @@ function display(req,res) {
           res.end();
         });
       }
+      if(req.url.indexOf('/voterid_url.txt') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/voterid_url.txt', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+      }
+      if(req.url.indexOf('/aadhaar_url.txt') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/aadhaar_url.txt', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+      }
+      if(req.url.indexOf('/pancard_url.txt') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/pancard_url.txt', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+      }
   }
     if(req.url.indexOf('.html') != -1){ //req.url has the pathname, check if it conatins '.html'
       if(req.url.indexOf('/page/dashboard.html') != -1){

@@ -12,13 +12,13 @@ def show_docs(collection,query,typ):
     stir = ""
     for document in response['response']['docs']:
         print(document['id'])
-        lines = open(typ+"_url.txt","r+").read().split("\n")
+        lines = open(typ+"_urls.txt","r+").read().split("\n")
         temp = 1
         for line in lines:
             if line == document['id']:
                 temp = 0
         if temp:
-            with open(typ+"_url.txt","a+") as f:
+            with open(typ+"_urls.txt","a+") as f:
                 f.write(document["id"])
     filename.write(stir)
     filename.close()

@@ -22,10 +22,17 @@ def post(filename,url):
  
 if __name__ == '__main__':
 
-    for filename in os.listdir("files"):
+    # for filename in os.listdir("files"):
         with open('files_metadata.csv', 'r') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                post("files/"+row[1],row[0])
+            with open('temp.csv','w') as out_file
+                reader = csv.reader(f)
+                for row in reader:
+                    post("files/"+row[1],row[0])
+                    for line in f:
+                        if line != row[0]+','+row[1]:
+                            out_file.write(row[0]+','+row[1]+"\n")
+        os.remove("files_metadata.csv")
+        os.rename("temp.csv,files_metadata.csv")
+
 
 

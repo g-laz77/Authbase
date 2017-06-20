@@ -32,12 +32,12 @@ if __name__ == '__main__':
     with open('regex.csv', 'r') as f:
         reader = csv.reader(f)
         for row in reader:
-            open(row[0]+'_url.txt', 'w').close()
+            open(row[0].lower()+'_url.txt', 'w').close()
 
     while 1:
         with open('regex.csv', 'r') as f:
             reader = csv.reader(f)
             for row in reader:
-                show_docs("techproducts",row[1],row[0]) #pancard
-                show_docs("booster",row[1],row[0]) #pancard
+                show_docs("techproducts",row[1],row[0].lower()) #pancard
+                show_docs("booster",row[1],row[0].lower() #pancard
                 time.sleep(10)

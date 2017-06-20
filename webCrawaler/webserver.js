@@ -20,6 +20,18 @@ http.createServer( function (request, response) {
 }).listen(9000);
 
 function display(req,res) {
+  if(req.url.indexOf('.csv') != -1){ //req.url has the pathname, check if it conatins '.html'
+      if(req.url.indexOf('/regex.csv') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/regex.csv', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+      }
+  }
   if(req.url.indexOf('.txt') != -1){ //req.url has the pathname, check if it conatins '.html'
       if(req.url.indexOf('/hit_urls.txt') != -1){
         var domain = "";
@@ -31,7 +43,7 @@ function display(req,res) {
           res.end();
         });
       }
-      if(req.url.indexOf('/voterid_url.txt') != -1){
+      else if(req.url.indexOf('/voterid_url.txt') != -1){
         var domain = "";
         //sleep.sleep(5);
         fs.readFile(__dirname + '/voterid_url.txt', function (err, data) {
@@ -41,7 +53,18 @@ function display(req,res) {
           res.end();
         });
       }
-      if(req.url.indexOf('/aadhaar_url.txt') != -1){
+      else if(req.url.indexOf('_url.txt') != -1){
+        var domain = "";
+        fs.closeSync(fs.openSync(req.url.substr(1), 'w'));
+        console.log(req.url);
+        fs.readFile(__dirname + req.url, function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+      }
+      else if(req.url.indexOf('/aadhaar_url.txt') != -1){
         var domain = "";
         //sleep.sleep(5);
         fs.readFile(__dirname + '/aadhaar_url.txt', function (err, data) {
@@ -51,8 +74,9 @@ function display(req,res) {
           res.end();
         });
       }
-      if(req.url.indexOf('/pancard_url.txt') != -1){
+      else if(req.url.indexOf('/pancard_url.txt') != -1){
         var domain = "";
+        
         //sleep.sleep(5);
         fs.readFile(__dirname + '/pancard_url.txt', function (err, data) {
           if (err) console.log(err);
@@ -202,25 +226,24 @@ function processAllFieldsOfTheForm(req, res) {
     var form = new formidable.IncomingForm();
     // #console.log("kk");  
     form.parse(req, function (err, fields, files) {
-        fs.writeFileSync("url.txt",fields.ss);
+        if(fields.ss)
+          fs.writeFileSync("url.txt",fields.ss);
+        else
+          fs.appendFileSync("regex.csv",'\n'+fields.rtype+','+fields.regex);
     });
-    const execFile = require('child_process').execFile;
-    const spawn = require('child_process').spawn;
-    const ls = spawn('scrapy', ['crawl', 'mygov_spider']);
+    // const execFile = require('child_process').execFile;
+    // const spawn = require('child_process').spawn;
+    // const ls = spawn('scrapy', ['crawl', 'mygov_spider']);
 
-    ls.stdout.on('data', (data) => {
-    console.log(`${data}`);
-    });
+    // ls.stdout.on('data', (data) => {
+    // console.log(`${data}`);
+    // });
 
-    ls.stderr.on('data', (data) => {
-    console.log(`${data}`);
-    });
-
-    // ls.on('close', (code) => {
-    // console.log(`child process exited with code ${code}`);
+    // ls.stderr.on('data', (data) => {
+    // console.log(`${data}`);
     // });
     res.writeHead(302, {
-            'Location': '/page/dashboard.html'
+            'Location': '/page/auth.html'
             });
         //res.end();
         res.end();

@@ -1,7 +1,9 @@
 function readTextFile() {
             
+			
+			
 			var file = new XMLHttpRequest();
-			file.open("GET", "../../hit_urls.txt", false);
+			file.open("GET", "/../../hit_urls.txt", false);
             file.onreadystatechange = function () {
 				if (file.readyState === 4) {
 					if (file.status === 200 || file.status == 0) {
@@ -15,41 +17,50 @@ function readTextFile() {
 					}
 				}
 			}
+			var file1 = new XMLHttpRequest();
 			file.send(null);
-
 			file1.open("GET", "../../pancard_url.txt", false);
             file1.onreadystatechange = function () {
 				if (file1.readyState === 4) {
 					if (file1.status === 200 || file1.status == 0) {
 						var lines = file1.responseText.split('\n');
-						document.getElementById("pancard").innerHTML = lines.length;
-						
+						if(lines[0] == "")
+							document.getElementById("pancard").innerHTML = '-';
+						else
+							document.getElementById("pancard").innerHTML = lines.length;						
 					}
 				}
 			}
 			file1.send(null);
-
-			file2.open("GET", "../../aadhaar_url.txt", false);
+			
+			var file2 = new XMLHttpRequest();
+			file2.open("GET", "/../../aadhaar_url.txt", false);
             file2.onreadystatechange = function () {
 				if (file2.readyState === 4) {
 					if (file2.status === 200 || file2.status == 0) {
 						var lines = file2.responseText.split('\n');
-						document.getElementById("aadhaar").innerHTML = lines.length;
+						if(lines[0] == "")
+							document.getElementById("aadhaar").innerHTML = '-';
+						else
+							document.getElementById("aadhaar").innerHTML = lines.length;
 						
 					}
 				}
 			}
 			file2.send(null);
-
-			file3.open("GET", "../../voterid_url.txt", false);
+			var file3 = new XMLHttpRequest();
+			file3.open("GET", "/../../voterid_url.txt", false);
             file3.onreadystatechange = function () {
 				if (file3.readyState === 4) {
 					if (file3.status === 200 || file3.status == 0) {
 						var lines = file3.responseText.split('\n');
-						document.getElementById("voter").innerHTML = lines.length;
+						if(lines[0] == "")
+							document.getElementById("voter").innerHTML = '-';
+						else
+							document.getElementById("voter").innerHTML = lines.length;
 						
 					}
 				}
 			}
-			file2.send(null);
+			file3.send(null);
 }

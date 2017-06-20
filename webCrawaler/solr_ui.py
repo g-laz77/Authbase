@@ -1,33 +1,43 @@
 from urllib.request import *
 import simplejson 
 import json
-import sleep
-
+import csv
+import time
 
 def show_docs(collection,query,typ):
     #querying for pancard details
-    connection = urlopen('http://localhost:8984/solr/'+collection+'/select?&indent=on&q=text:/'+query+'/&wt=json')
-    response = simplejson.load(connection)
-    filename = open("details.txt","w")
-    stir = ""
-    for document in response['response']['docs']:
-        print(document['id'])
-        lines = open(typ+"_urls.txt","r+").read().split("\n")
-        temp = 1
-        for line in lines:
-            if line == document['id']:
-                temp = 0
-        if temp:
-            with open(typ+"_urls.txt","a+") as f:
-                f.write(document["id"])
-    filename.write(stir)
-    filename.close()
+    print('http://localhost:8984/solr/'+collection+'/select?&indent=on&q=text:/'+query+'/&wt=json')
+    try:
+        connection = urlopen('http://localhost:8984/solr/'+collection+'/select?&indent=on&q=text:/'+query+'/&wt=json')
+        response = simplejson.load(connection)
+        #print(response)
+        if response['response']['numFound'] == 0:
+            return
+        stir = ""
+        for document in response['response']['docs']:
+            print(document['id'])
+            lines = open(typ+"_url.txt","r+").read().split("\n")
+            temp = 1
+            for line in lines:
+                if line == document['id']:
+                    temp = 0
+            if temp:
+                with open(typ+"_url.txt","a+") as f:
+                    f.write(document["id"])
+    except:
+        return
+    
 
 if __name__ == '__main__':
+    with open('regex.csv', 'r') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            open(row[0]+'_url.txt', 'w').close()
+
     while 1:
-        show_docs("techproducts","[A-Z]{5}[0-9]{4}[A-Z]","pancard") #pancard
-        show_docs("techproducts","[0-9]{4}\ [0-9]{4}\ [0-9]{4}","aadhaar") #aadhaar 
-        show_docs("techproducts","[A-Z]{3}[0-9]{7}","voterid") #voterid
-        show_docs("booster","[A-Z]{5}[0-9]{4}[A-Z]","pancard") #pancard
-        show_docs("booster","[0-9]{4}\ [0-9]{4}\ [0-9]{4}","aadhaar") #aadhaar 
-        show_docs("booster","[A-Z]{3}[0-9]{7}","voterid") #voterid
+        with open('regex.csv', 'r') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                show_docs("techproducts",row[1],row[0]) #pancard
+                show_docs("booster",row[1],row[0]) #pancard
+                time.sleep(10)

@@ -23,6 +23,7 @@ def show_docs(collection,query,typ):
                     temp = 0
             if temp:
                 with open(typ+"_url.txt","a+") as f:
+                    print(document['id'])
                     f.write(document["id"])
     except:
         return
@@ -39,5 +40,5 @@ if __name__ == '__main__':
             reader = csv.reader(f)
             for row in reader:
                 show_docs("techproducts",row[1],row[0].lower()) #pancard
-                show_docs("booster",row[1],row[0].lower() #pancard
+                show_docs("booster",row[1],row[0].lower()) #pancard
                 time.sleep(10)

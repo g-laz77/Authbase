@@ -53,17 +53,7 @@ function display(req,res) {
           res.end();
         });
       }
-      else if(req.url.indexOf('_url.txt') != -1){
-        var domain = "";
-        fs.closeSync(fs.openSync(req.url.substr(1), 'w'));
-        console.log(req.url);
-        fs.readFile(__dirname + req.url, function (err, data) {
-          if (err) console.log(err);
-          res.writeHead(200, {'Content-Type': 'text/txt'});
-          res.write(data);
-          res.end();
-        });
-      }
+      
       else if(req.url.indexOf('/aadhaar_url.txt') != -1){
         var domain = "";
         //sleep.sleep(5);
@@ -79,6 +69,28 @@ function display(req,res) {
         
         //sleep.sleep(5);
         fs.readFile(__dirname + '/pancard_url.txt', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+      }
+      else if(req.url.indexOf('/search_urls.txt') != -1){
+        var domain = "";
+        fs.readFile(__dirname + '/search_urls.txt', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/txt'});
+          res.write(data);
+          res.end();
+        });
+        //fs.closeSync(fs.openSync('search_url.txt', 'w'));
+      }
+      else if(req.url.indexOf('_url.txt') != -1){
+        var domain = "";
+        if (!fs.existsSync(req.url.substr(1))) {
+          fs.closeSync(fs.openSync(req.url.substr(1), 'w'));
+        }
+        fs.readFile(__dirname + req.url, function (err, data) {
           if (err) console.log(err);
           res.writeHead(200, {'Content-Type': 'text/txt'});
           res.write(data);
@@ -228,6 +240,8 @@ function processAllFieldsOfTheForm(req, res) {
     form.parse(req, function (err, fields, files) {
         if(fields.ss)
           fs.writeFileSync("url.txt",fields.ss);
+        else if(fields.search)
+          fs.writeFileSync("search_urls.txt",fields.search);
         else
           fs.appendFileSync("regex.csv",'\n'+fields.rtype+','+fields.regex);
     });
@@ -245,6 +259,5 @@ function processAllFieldsOfTheForm(req, res) {
     res.writeHead(302, {
             'Location': '/page/auth.html'
             });
-        //res.end();
         res.end();
 }

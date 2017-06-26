@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    <!--<meta http-equiv="refresh" content="15">-->
+    <meta http-equiv="refresh" content="15">
     <title> &lt;Authenticat.io/n&gt; Secure IT Now!</title>
     <script async="" src="//www.google-analytics.com/analytics.js"></script>
     <script type="text/javascript">
@@ -12,7 +12,7 @@
         SG_APP_POPUP_URL = 'http://docs.layerswp.com/wp-content/plugins/popup-builder';
         SG_POPUP_VERSION = '2.41_1'
     </script>
-    <script src="../assets/js/current.js"></script>
+    <script src="../assets/js/bank.js"></script>
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//s.w.org">
     <link rel="alternate" type="application/rss+xml" title="<docs.layerswp.com> » Feed" href="http://docs.layerswp.com/feed/">
@@ -338,8 +338,7 @@
     <link rel="shortcut icon" href="http://www.iconj.com/ico/h/h/hheay8oa6p.ico" type="image/x-icon">
     <meta name="msapplication-TileImage" content="http://docs.layerswp.com/wp-content/uploads/2016/05/cropped-logo-270x270.png">
 </head>
-
-<body onload="readTextFile()" class="home page page-id-36 page-template page-template-builder page-template-builder-php layers-header-sticky layers-header-overlay has-site-logo">
+<body onload="rtf()" class="home page page-id-36 page-template page-template-builder page-template-builder-php layers-header-sticky layers-header-overlay has-site-logo">
     <section class="wrapper-site">
 
 
@@ -370,147 +369,16 @@
         <br/>
         <br/>
         <br/>
-        <form class="navbar-form navbar-left" role="search"  method="post" style="width:100%;margin-left:20px;">
-            <div class="form-group row">
+        <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
+                                    Pancard Hits
+                                </h2>
+        <div class="row" style="max-height: 350px; overflow: auto;">
 
-                <input name="query" type="text" class="form-control" placeholder="Query" style="width:1000px;">
-
-                <button type="submit" class="btn btn-default" style="background-color:rgb(111, 128, 128);color:white;">
-                                    <!--<span class="glyphicon glyphicon-search"></span>-->
-                                    Submit
-                                </button>
-            </div>
-            </div>
-        </form>
-
+            <table id="urls" style="float:left;width:80%;max-height:400px;overflow-y: auto;margin-left: 50px;">
+            </table>
         </div>
-
-        <!--<div class="row">-->
-
-        <div style="background-color:#2b2b2b" ;>
-            <div style="background-color:#2b2b2b;margin-right:20px;margin-left:20px;">
-                <!--<br>>      -->
-                <table >
-                    <tbody>
-                        <tr>
-
-                            <td style="width:50%;border: 15px solid #2b2b2b;">
-                                <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
-                                    Indexed domains
-                                </h2>
-                                <div class="row" style="max-height: 350px; overflow: auto;">
-
-                                    <table id="urls" style="float:left;width:80%;max-height:300px;overflow-y: auto;margin-left: 50px;">
-                                    </table>
-                                </div>
-                                <form class="navbar-form navbar-left" role="search" method="post" style="width:100%;">
-                                    <div class="form-group">
-                                        <input id ="sea" name="search" type="text" class="form-control" placeholder="Search" style="width:600px;margin-left:30px;">
-                                        <button type="submit" onclick="onsea(document.getElementById('sea').value);" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
-                                    </div>
-                                </form>
-                                <table id="result">
-                                </table>
-                            </td>
-                            <!--<input type="button" onClick="gotoNode(\'' + result.name + '\')"/>-->
-                            <td style="width:50%;border: 15px solid #2b2b2b;">
-                                <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
-                                    Hits
-                                </h2>
-                                <table style="float:left;width:70%;margin-left:60px;">
-                                    <tbody id="reg">
-                                        <tr>
-                                            <th style="border: 0px solid #dddddd;">Type</th>
-                                            <th>Hits</th>
-                                        </tr>
-                                        <!--<tr>
-                                            <td> PANCARD</td>
-                                            <td id="pancard"></td>
-                                        </tr>
-                                        <tr>
-                                            <td> AADHAAR</td>
-                                            <td id="aadhaar"></td>
-                                        </tr>
-                                        <tr>
-                                            <td> VOTER-ID</td>
-                                            <td id="voterid"></td>
-                                        </tr>-->
-
-                                    </tbody>
-                                </table>
-                                <form class="navbar-form navbar-left" role="search"  method="post" style="width:100%;">
-                                    <div class="form-group">
-                                        <h3 style="margin-left:30px;">Add New</h3>
-                                        <input name="rtype" type="text" class="form-control" placeholder="Type" style="width:600px;margin-left:30px;">
-                                        <input name="regex" type="text" class="form-control" placeholder="Regex" style="width:600px;margin-left:30px;">
-                                        <button type="submit" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </button>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width:50%;background-color: #dddddd;border: 15px solid #2b2b2b;">
-                                <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
-                                    ML
-                                </h2>
-                                <div class="row" style="height: 350px; overflow: auto;background-color:#dddddd;">
-                                </div>
-                            </td>
-                            <td style="width:50%;background-color: #dddddd;border: 15px solid #2b2b2b;">
-                                <h2 style="text-align:center;color:white;background-color:rgb(111, 128, 128);">
-                                    Vulnerabilities
-                                </h2>
-                                <div class="row" style="height: 350px; overflow: auto;background-color:#dddddd;">
-                                </div>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-
-        <!-- END / MAIN SITE #wrapper -->
-        <link rel="stylesheet" id="layers-slider-css" href="http://docs.layerswp.com/wp-content/themes/layerswp/core/widgets/css/swiper.css?ver=1.2.13"
-            type="text/css" media="all">
-        <link rel="stylesheet" id="layers-custom-styles-css" href="http://docs.layerswp.com/wp-content/themes/layerswp/assets/css/custom.css?ver=4.6.1"
-            type="text/css" media="all">
-        <style id="layers-custom-styles-inline-css" type="text/css">
-            .image_2 {
-                height: 300px;
-                width: 600px;
-                margin-top: 20px;
-                background-size: 600px 300px;
-                border-radius: 10px;
-            }
-
-            .image_3 {
-                height: 320px;
-                border-radius: 5px;
-            }
-
-            .text_2 {}
-
-            .box_main {
-                height: 150px;
-                border-radius: 5px;
-            }
-        </style>
-        <script type="text/javascript">
-            /* <![CDATA[ */
-            var layers_script_settings = {
-                "header_sticky_breakpoint": "270"
-            };
-            /* ]]> */
-        </script>
-
-        <script src="../assets/js/current.js"></script>
-
+        <script src="../assets/js/curren.js"></script>
+    </section>
 </body>
-
 </html>
+s

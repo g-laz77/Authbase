@@ -99,7 +99,7 @@ function display(req,res) {
       }
   }
     if(req.url.indexOf('.html') != -1){ //req.url has the pathname, check if it conatins '.html'
-      if(req.url.indexOf('/page/dashboard.html') != -1){
+      if(req.url.indexOf('/dashboard.html') != -1){
         var domain = "";
         //sleep.sleep(5);
         fs.readFile(__dirname + '/page/dashboard.html', function (err, data) {
@@ -109,7 +109,27 @@ function display(req,res) {
           res.end();
         });
       }
-      if(req.url.indexOf('/page/auth.html') != -1){
+      if(req.url.indexOf('/bank.html') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/page/bank.html', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.write(data);
+          res.end();
+        });
+      }
+      if(req.url.indexOf('/pancard.html') != -1){
+        var domain = "";
+        //sleep.sleep(5);
+        fs.readFile(__dirname + '/page/pancard.html', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.write(data);
+          res.end();
+        });
+      }
+      if(req.url.indexOf('/auth.html') != -1){
         var domain = "";
         //sleep.sleep(5);
         fs.readFile(__dirname + '/page/auth.html', function (err, data) {
@@ -120,7 +140,7 @@ function display(req,res) {
         });
       }
       if(req.url.indexOf('/index.html') != -1){
-        fs.readFile(__dirname + '/index.html', function (err, data) {
+        fs.readFile(__dirname + '/page/index.html', function (err, data) {
           if (err) console.log(err);
           res.writeHead(200, {'Content-Type': 'text/html'});
           res.write(data);
@@ -203,7 +223,22 @@ function display(req,res) {
           res.end();
         });
       }
-
+      if(req.url.indexOf('/assets/js/curren.js') != -1){
+        fs.readFile(__dirname + '/assets/js/curren.js', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/javascript'});
+          res.write(data);
+          res.end();
+        });
+      }
+      if(req.url.indexOf('/assets/js/bank.js') != -1){
+        fs.readFile(__dirname + '/assets/js/bank.js', function (err, data) {
+          if (err) console.log(err);
+          res.writeHead(200, {'Content-Type': 'text/javascript'});
+          res.write(data);
+          res.end();
+        });
+      }
     }
 
     if(req.url.indexOf('.css') != -1){ //req.url has the pathname, check if it conatins '.css'
@@ -257,7 +292,7 @@ function processAllFieldsOfTheForm(req, res) {
     // console.log(`${data}`);
     // });
     res.writeHead(302, {
-            'Location': '/page/auth.html'
+            'Location': '/auth.html'
             });
         res.end();
 }

@@ -47,7 +47,7 @@ class MyGovSpider(CrawlSpider):
 
     def parse(self, response):
         url = response.url.split("/")
-        lines = open("hit_urls.txt",'r+').read().split('\n')
+        lines = open("hit_urls.txt",'a+').read().split('\n')
         temp = 0
         l = re.match(r"(.*gov.in/).*",response.url)
         if l:
@@ -141,7 +141,8 @@ class MyGovSpider(CrawlSpider):
                     #print(save_file)
                     with urllib.request.urlopen(item["link"]) as response, open(save_file, 'wb') as out_file:
                         shutil.copyfileobj(response, out_file)
-                    #   make call to the pdf extractor and dump the data on solr                
+                    #   make call to the pdf extractor and dump the data on solr 
+                    post(save_file,str(item["link"]))               
                 elif reg6:  #if zipfiles
                     r = requests.get(zip_file_url)
                     z = zipfile.ZipFile(io.BytesIO(r.content))

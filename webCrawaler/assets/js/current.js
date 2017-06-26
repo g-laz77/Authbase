@@ -13,7 +13,7 @@ function readTextFile() {
 	var file = new XMLHttpRequest();
 	file.open("GET", "/../../hit_urls.txt", false);
 	file.onreadystatechange = function () {
-		if (file.readyState === 4) {
+		if (file.readyState === 4) { 
 			if (file.status === 200 || file.status == 0) {
 				var lines = file.responseText.split('\n');
 				response = "<tr><th>#</th><th>URLs</th></tr>";
@@ -41,11 +41,18 @@ function readTextFile() {
 						if (fil.readyState === 4) {
 							if (fil.status === 200 || fil.status == 0) {
 								var ls = fil.responseText.split('\n');
-								if (ls[0] != "")
-									response += ls.length + "</td></tr>";
+								if (ls[0] != "" && i == 0)
+									response += ls.length + "\t<a style=\"color:white;\" href=\"/pancard.html\">[View URL's]</a></td></tr>";
+								else if(ls[0] != "" && i == 3)
+									response += ls.length + "\t<a style=\"color:white;\" href=\"/bank.html\">[View URL's]</a></td></tr>";									
 								else
-									response += "-</td></tr>";
-
+								{
+									if(i==2)
+										response += "<strike>Found</strike></td></tr>";
+									else
+										response += "-</td></tr>";
+								}
+										
 							}
 						}
 					}
@@ -98,4 +105,5 @@ function readTextFile() {
 	}
 	
 }
+
 // }
